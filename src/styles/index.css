@@ -1,0 +1,120 @@
+* { box-sizing: border-box; }
+
+:root{
+  --bg:       #2A2936;
+  --card:     #343344;
+  --border:   #403F4F;
+  --text:     #E7E6EE;
+  --muted:    #B8B7C2;
+  --accent:   #A7B3D4;
+  --accent-2: #C3BAD8;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { opacity: .9; }
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  background: rgba(11,11,16,.7);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+  z-index: 10;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+.brand { font-weight: 800; letter-spacing: .2px; }
+
+/* Nav + buttons */
+.nav { display: flex; gap: 14px; }
+.btn {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #151826;
+  color: var(--text);
+}
+.btn.primary {
+  border: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #2A2936;
+  font-weight: 700;
+}
+
+/* Sections */
+.section {
+	display: flex;
+	justify-content: center;
+	padding: 60px 0; 
+}
+.section .container {
+	background: var(--card);
+	padding: 40px;
+	border-radius: 18px;
+	box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+	width: 100%;
+	max-width: 640px;
+	text-align: left;
+}
+.section h2 { margin: 0 0 12px; font-size: clamp(22px, 3vw, 28px); text-align: center;}
+.section p { color: #d7dbf2; max-width: 70ch; text-align: center;}
+
+.bullets { margin: 12px 0 0; padding-left: 20px; color: #d7dbf2; }
+.bullets li { margin: 6px 0; }
+
+/* Forms */
+.form {
+  display: flex;
+	flex-direction: column;
+  gap: 12px;
+	width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.form label { display: grid; gap: 6px; }
+.form input, .form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+.form .btn {
+	align-self: stretch;
+	width: 100%;
+	text-align: center;
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 20px;
+}
