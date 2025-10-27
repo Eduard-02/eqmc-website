@@ -1,6 +1,14 @@
 <script setup>
 	import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+	const base = import.meta.env.BASE_URL.endsWith('/')
+		? import.meta.env.BASE_URL
+		: `${import.meta.env.BASE_URL}/`
+	const asset = (file) => `${base}assets/${file}`
+	const introVideo = asset('intro.mp4')
+	const volumeOff = asset('volume-off.png')
+	const volumeOn = asset('volume-on.png')
+
 	const show = ref(true)
 	const videoEl = ref(null)
 	const isMuted = ref(true)
@@ -21,7 +29,7 @@
 		isMuted.value = !isMuted.value
 		video.muted = isMuted.value
 
-		if (!isMuted.value) videoEl.play().catch(() => {})
+		if (!isMuted.value) video.play().catch(() => {})
 	}
 
 	onMounted(() => {
@@ -36,7 +44,9 @@
 		if (v) {
 			const attempt = () => v.play().catch(() => {/* ignore */})
 			v.addEventListener("loadeddata", attempt, { once: true })
-			v.addEventListener("volumechange", isMuted = v.value.muted)
+			v.addEventListener("volumechange", () => {
+				isMuted.value = v.muted
+			})
 		}
 
 		document.documentElement.style.overflow = "hidden"
@@ -48,88 +58,51 @@
 </script>
 
 <template>
-	<div v-if="show" class="intro-overlay" role="dialog" aria-label="Website intro">
+	<div
+		v-if="show"
+		class="fixed inset-0 z-[9999] grid place-items-center bg-[#2A2936]"
+		role="dialog"
+		aria-label="Website intro"
+	>
 		<video 
 			ref="videoEl"
-			class="intro-video"
+			class="h-screen w-screen object-contain object-center md:object-cover"
 			autoplay
 			muted
 			playsinline
 			preload="auto"
 			@ended="handleEnded"
 		>
-			<source src="/src/assets/intro.mp4" type="video/mp4"/>
+			<source :src="introVideo" type="video/mp4"/>
 			<!-- Fallback text -->
 			Your browser does not support the video tag.
 		</video>
 
-		<button class="skip" @click="closeIntro" aria-label="Saltar introdução">Saltar</button>
+		<button
+			class="absolute right-5 top-5 rounded-xl border border-white/20 bg-gradient-to-r from-accent to-accent2 px-4 py-2 font-semibold text-[#2A2936] transition hover:opacity-90 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white"
+			@click="closeIntro"
+			aria-label="Saltar introdução"
+		>
+			Saltar
+		</button>
 		<button 
-			class="audio" 
+			class="absolute bottom-5 right-5 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20"
 			:aria-pressed="isMuted"
 			:aria-label="isMuted ? 'Ativar som' : 'Silenciar'"
 			@click="toggleMute"
 		>
 			<img
 				v-if="isMuted"
-				src="/src/assets/volume-off.png" 
+				:src="volumeOff" 
 				alt="Muted"
+				class="h-[22px] w-[22px] invert"
 			/>
 			<img
 				v-else
-				src="/src/assets/volume-on.png" 
+				:src="volumeOn" 
 				alt="UnMuted"
+				class="h-[22px] w-[22px] invert"
 			/>
 		</button>
 	</div>
 </template>
-
-<style scoped>
-	.intro-overlay {
-		position: fixed; inset: 0;
-		z-index: 9999;
-		background: #2A2936;
-		display: grid;
-		place-items: center;
-	}
-	.intro-video {
-		width: 100vw;
-		height: 100vh;
-		object-fit: cover;
-	}
-
-	/* Skip button */
-	.skip {
-		position: absolute; right: 20px; top: 20 px;
-		padding: 10px 14px;
-		border-radius: 12px;
-		border: 1px solid rgba(255, 255, 255, .2);
-		background: linear-gradient(90deg, var(--accent), var(--accent-2));
-		color: #2A2936;
-		font-weight: 700;
-		cursor: pointer;
-	}
-	.skip:focus { outline: 2px solid white; outline-offset: 2px; }
-	.audio {
-		position: absolute;
-		right: 20px;
-		bottom: 20px;
-		width: 44px;
-		height: 44px;
-		border-radius: 50%;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		background: rgba(0, 0, 0, 0.3);
-		display: grid;
-		place-items: center;
-		cursor: pointer;
-		z-index: 2;
-	}
-	.audio img {
-		width: 22px;
-		height: 22px;
-		filter: brightness(1.6);
-	}
-	.audio:hover {
-		background: rgba(255, 255, 255, 0.2);
-	}
-</style>

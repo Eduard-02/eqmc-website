@@ -11,10 +11,10 @@
 </script>
 
 <template>
-  <div id="top">
+  <div id="top" class="flex min-h-screen flex-col">
 		<IntroOverlay />
     <Header />
-    <main>
+    <main class="flex-1">
       <About />
       <Contact />
     </main>
