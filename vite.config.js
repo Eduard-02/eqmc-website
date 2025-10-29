@@ -43,5 +43,5 @@ export default defineConfig({
       },
     },
   ],
-	base: "/eqmc-website",
+	base: "/",
 })
