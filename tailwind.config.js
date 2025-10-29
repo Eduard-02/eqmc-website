@@ -4,15 +4,14 @@ export default {
   theme: {
     container: {
       center: true,
+      // One consistent gutter scale. Adjust if you want tighter/looser.
       padding: {
-        DEFAULT: '0.75rem',
-        sm: '0.875rem',
-        lg: '1rem',
-        xl: '1.25rem',
-        '2xl': '1.25rem',
-      },
-      screens: {
-        '2xl': '1280px',
+        DEFAULT: '1rem',   // 16px (phones)
+        sm: '1.25rem',     // 20px
+        md: '1.5rem',      // 24px
+        lg: '2rem',        // 32px (tablets / small laptops)
+        xl: '3rem',        // 48px (desktop)
+        '2xl': '3.5rem',   // 56px (very wide)
       },
     },
     extend: {

@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div id="top" class="flex min-h-screen flex-col">
+  <div id="top" class="flex min-h-screen flex-col overflow-x-hidden">
 		<IntroOverlay />
     <Header />
     <main class="flex-1">
