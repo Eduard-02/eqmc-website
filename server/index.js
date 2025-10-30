@@ -2,16 +2,26 @@ import http from 'http'
 import handler from '../api/contact.js'
 
 const PORT = process.env.PORT || 3000
-const allowedOrigin = process.env.ALLOWED_ORIGIN || '*'
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || '*')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean)
 
-const setCorsHeaders = (res) => {
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+const resolveOrigin = (req) => {
+  if (allowedOrigins.includes('*')) return '*'
+  const requestOrigin = req.headers.origin
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) return requestOrigin
+  return allowedOrigins[0] || '*'
+}
+
+const setCorsHeaders = (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', resolveOrigin(req))
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 }
 
 const server = http.createServer(async (req, res) => {
-  setCorsHeaders(res)
+  setCorsHeaders(req, res)
 
   if (req.method === 'OPTIONS') {
     res.statusCode = 204
