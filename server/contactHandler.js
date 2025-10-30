@@ -36,7 +36,8 @@ const getResend = () => {
 
 export const sendContactEmail = async ({ name, email, subject, message }) => {
   const resend = getResend()
-  const from = process.env.CONTACT_FROM || 'EQMC Contact <noreply@your-verified-domain.com>'
+
+  const from = process.env.CONTACT_FROM || 'EQMC Contact <onboarding@resend.dev>'
   const to = process.env.CONTACT_TO || 'estoriasquemecontaram@gmail.com'
 
   const html = `
@@ -66,5 +67,25 @@ export const sendContactEmail = async ({ name, email, subject, message }) => {
 
   console.log('Email sent via Resend:', data?.id || data)
 }
+
+export const readJsonBody = async (req) => {
+  if (req.body && typeof req.body === 'object') return req.body
+
+  const chunks = []
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  }
+
+  if (!chunks.length) return null
+
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString('utf8'))
+  } catch {
+    const err = new Error('Invalid JSON payload')
+    err.statusCode = 400
+    throw err
+  }
+}
+
 const escapeHtml = (str) =>
   str.replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[c]))
