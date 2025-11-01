@@ -61,8 +61,8 @@ const authorPhoto = `${base}assets/tucha-guerra.png`
           </div>
         </div>
 
-        <div class="space-y-5 border-b border-white/20 pt-8 pb-12 text-left leading-relaxed text-text">
-          <p id="sobre-livro" class="text-[20px] font-semibold">Sobre este livro</p>
+        <div id="sobre-livro" class="space-y-5 border-b border-white/20 pt-8 pb-12 text-left leading-relaxed text-text">
+          <p class="text-[20px] font-semibold">Sobre este livro</p>
           <p class="text-[18px] text-justify">
             <span class="italic">Estórias que me Contaram</span> é uma navegação pelas geografias invisíveis da alma feminina. É sobre amores que nos consomem e amizades que nos reconstroem. Sobre cicatrizes que se tornam suaves como seda. Sobre borboletas que aprendem a voar depois da tempestade. Para as mulheres, este livro é um espelho onde se poderão rever, descobrindo que não estão sozinhas nas suas lutas.
             Para os homens, é uma janela para compreender melhor as mulheres das suas vidas. Para todos, é a prova de que há sempre uma saída, sempre uma luz nos momentos mais sombrios.
@@ -102,8 +102,8 @@ const authorPhoto = `${base}assets/tucha-guerra.png`
 				</div>
       </div>
 
-			<div class="space-y-6 border-b border-white/20 pt-8 pb-12 text-left leading-relaxed text-text">
-				<h2 id="sobre-autora" class="text-[20px] font-semibold">Sobre a autora</h2>
+			<div id="sobre-autora" class="space-y-6 border-b border-white/20 pt-8 pb-12 text-left leading-relaxed text-text">
+				<h2 class="text-[20px] font-semibold">Sobre a autora</h2>
 
 				<div class="grid gap-8 px-4 sm:px-0 md:[grid-template-columns:minmax(300px,400px)_1fr] md:[grid-template-rows:auto_auto] items-start">
 
