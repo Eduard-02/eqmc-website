@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
     role="dialog"
     aria-label="Website intro"
   >
-    <div ref="videoBoxEl" id="videoBox" class="relative flex items-center justify-center">
+    <div ref="videoBoxEl" id="videoBox" class="relative flex items-center justify-center w-[100dvw] h-[100dvh]">
       <video
         ref="videoEl"
         id="introVideo"
