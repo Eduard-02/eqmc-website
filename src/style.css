@@ -11,18 +11,18 @@
 
   html, body {
     @apply m-0 text-text font-sans leading-relaxed;
-    overflow-x: hidden; /* ✅ prevents horizontal scroll */
+    overflow-x: hidden;
 
     background-image: url('/assets/new-background.png'), linear-gradient(#2A2936, #2A2936);
     background-color: #2A2936;
     background-position: top center, center;
     background-size: 1600px auto, auto;
-    background-repeat: repeat-x, repeat;
+    background-repeat: repeat, repeat;
     background-attachment: fixed, fixed;
   }
 
   @media (min-width: 1600px) {
-    html, body { background-repeat: repeat-x, repeat; }
+    html, body { background-repeat: repeat, repeat; }
   }
 
   @media (min-height: 1080px) {

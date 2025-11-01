@@ -11,6 +11,7 @@ const rotatePNG = asset('rotate.png')
 
 const show = ref(true)
 const videoEl = ref(null)
+const videoBoxEl = ref(null)
 const isMuted = ref(true)
 
 const ua = navigator.userAgent
@@ -21,17 +22,32 @@ const isPhoneUA = /Mobi|iPhone|iPod/i.test(ua)
 const landscapeActive = ref(false)
 const isHandheld = ref(false)
 
-const videoClass = computed(() => {
-  return isHandheld.value
-    ? 'w-full h-full object-contain'
-    : 'w-full h-full object-contain md:object-cover'
-})
-
 function updateDeviceFlags() {
   const touch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window
   const shortSide = Math.min(window.innerWidth, window.innerHeight)
   const uaMobileish = isPhoneUA || isIpadUA || isAndroidTabletUA
   isHandheld.value = !!(touch && (uaMobileish || shortSide <= 1024))
+}
+
+function layoutVideoBox() {
+  if (isHandheld.value) return
+  const box = videoBoxEl.value
+  const v = videoEl.value
+  if (!box || !v || !v.videoWidth || !v.videoHeight) return
+  const ar = v.videoWidth / v.videoHeight
+  const w = window.innerWidth
+  const h = window.innerHeight
+  if (w / h > ar) {
+    const hh = Math.min(h, window.innerHeight)
+    const ww = hh * ar
+    box.style.width = `${ww}px`
+    box.style.height = `${hh}px`
+  } else {
+    const ww = Math.min(w, window.innerWidth)
+    const hh = ww / ar
+    box.style.width = `${ww}px`
+    box.style.height = `${hh}px`
+  }
 }
 
 function closeIntro() {
@@ -60,9 +76,12 @@ function toggleOrientation() {
   container.classList.toggle('simulate-landscape', landscapeActive.value)
 }
 
-function onResize() { updateDeviceFlags(); updateViewportVars() }
+function onResize() {
+  updateDeviceFlags()
+  updateViewportVars()
+  layoutVideoBox()
+}
 
-/* ---- prevent zoom during intro (mobile) ---- */
 let lastTouchEnd = 0
 function attachNoZoomGuards() {
   const opts = { passive: false }
@@ -87,7 +106,6 @@ function preventDoubleTap(e){
   lastTouchEnd = now
 }
 
-/* ---- keep buttons above browser UI using visualViewport + safe areas ---- */
 let vvHandlersAttached = false
 function updateViewportVars() {
   const vv = window.visualViewport
@@ -142,7 +160,7 @@ onMounted(() => {
   const v = videoEl.value
   if (v) {
     const attempt = () => v.play().catch(() => {})
-    v.addEventListener('loadeddata', attempt, { once: true })
+    v.addEventListener('loadedmetadata', () => { attempt(); layoutVideoBox() }, { once: true })
     v.addEventListener('volumechange', () => { isMuted.value = v.muted })
   }
 
@@ -151,6 +169,7 @@ onMounted(() => {
     attachViewportGuards()
   }
   document.documentElement.style.overflow = 'hidden'
+  layoutVideoBox()
 })
 
 onBeforeUnmount(() => {
@@ -166,26 +185,49 @@ onBeforeUnmount(() => {
   <div
     v-if="show"
     id="introContainer"
-    class="fixed inset-0 z-[9999] grid place-items-center bg-black overflow-hidden"
+    class="fixed left-0 top-0 z-[9999] w-[100dvw] h-[100dvh] grid place-items-center bg-black overflow-hidden"
     :style="isHandheld ? 'touch-action:none' : ''"
     role="dialog"
     aria-label="Website intro"
   >
-    <video
-      ref="videoEl"
-      id="introVideo"
-      :class="videoClass"
-      autoplay
-      muted
-      playsinline
-      preload="auto"
-      @ended="handleEnded"
-    >
-      <source :src="introVideo" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    <div ref="videoBoxEl" id="videoBox" class="relative flex items-center justify-center">
+      <video
+        ref="videoEl"
+        id="introVideo"
+        class="block w-full h-full object-contain bg-black"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        @ended="handleEnded"
+      >
+        <source :src="introVideo" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <button
+        v-if="!isHandheld"
+        class="absolute right-4 top-4 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium text-white tracking-wide backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/40 z-[10001]"
+        @click="closeIntro"
+        aria-label="Saltar introdução"
+      >
+        Saltar
+      </button>
+
+      <button
+        v-if="!isHandheld"
+        class="absolute right-5 bottom-5 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20 z-[10001]"
+        :aria-pressed="isMuted"
+        :aria-label="isMuted ? 'Ativar som' : 'Silenciar'"
+        @click="toggleMute"
+      >
+        <img v-if="isMuted" :src="volumeOff" alt="Muted" class="h-[22px] w-[22px] invert" />
+        <img v-else :src="volumeOn" alt="UnMuted" class="h-[22px] w-[22px] invert" />
+      </button>
+    </div>
 
     <button
+      v-if="isHandheld"
       class="fixed rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium text-white tracking-wide backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/40 z-[10001]"
       :style="skipStyle"
       @click="closeIntro"
@@ -195,6 +237,7 @@ onBeforeUnmount(() => {
     </button>
 
     <button
+      v-if="isHandheld"
       class="fixed grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20 z-[10001]"
       :style="muteStyle"
       :aria-pressed="isMuted"
@@ -230,5 +273,16 @@ onBeforeUnmount(() => {
   left: 50%;
   translate: -50% -50%;
   overflow: hidden;
+}
+
+.simulate-landscape #videoBox {
+  width: 100%;
+  height: 100%;
+}
+
+.simulate-landscape #introVideo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 </style>
