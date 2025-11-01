@@ -1,0 +1,19 @@
+{
+  "name": "Estórias Que Me Contaram",
+  "short_name": "EQMC",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2A2936",
+  "background_color": "#2A2936",
+  "display": "standalone"
+}
