@@ -39,12 +39,11 @@ function closeIntro() {
   container?.classList.remove('simulate-landscape')
   show.value = false
   detachNoZoomGuards()
+  detachViewportGuards()
   document.documentElement.style.overflow = ''
 }
 
-function handleEnded() {
-  closeIntro()
-}
+function handleEnded() { closeIntro() }
 
 function toggleMute() {
   const v = videoEl.value
@@ -61,10 +60,9 @@ function toggleOrientation() {
   container.classList.toggle('simulate-landscape', landscapeActive.value)
 }
 
-function onResize() {
-  updateDeviceFlags()
-}
+function onResize() { updateDeviceFlags(); updateViewportVars() }
 
+/* ---- prevent zoom during intro (mobile) ---- */
 let lastTouchEnd = 0
 function attachNoZoomGuards() {
   const opts = { passive: false }
@@ -81,13 +79,57 @@ function detachNoZoomGuards() {
   document.removeEventListener('touchmove', preventPinch)
   document.removeEventListener('touchend', preventDoubleTap)
 }
-function preventDefault(e) { e.preventDefault() }
-function preventPinch(e) { if (e.touches && e.touches.length > 1) e.preventDefault() }
-function preventDoubleTap(e) {
+function preventDefault(e){ e.preventDefault() }
+function preventPinch(e){ if (e.touches && e.touches.length > 1) e.preventDefault() }
+function preventDoubleTap(e){
   const now = Date.now()
   if (now - lastTouchEnd <= 300) e.preventDefault()
   lastTouchEnd = now
 }
+
+/* ---- keep buttons above browser UI using visualViewport + safe areas ---- */
+let vvHandlersAttached = false
+function updateViewportVars() {
+  const vv = window.visualViewport
+  if (!vv) return
+  const bottom = Math.max(0, window.innerHeight - vv.height - vv.offsetTop)
+  const top    = Math.max(0, vv.offsetTop)
+  const left   = Math.max(0, vv.offsetLeft)
+  const right  = Math.max(0, window.innerWidth - vv.width - vv.offsetLeft)
+  const root = document.documentElement.style
+  root.setProperty('--vv-bottom', bottom + 'px')
+  root.setProperty('--vv-top',    top + 'px')
+  root.setProperty('--vv-left',   left + 'px')
+  root.setProperty('--vv-right',  right + 'px')
+}
+function attachViewportGuards() {
+  const vv = window.visualViewport
+  if (!vv || vvHandlersAttached) return
+  vv.addEventListener('resize', updateViewportVars)
+  vv.addEventListener('scroll', updateViewportVars)
+  vvHandlersAttached = true
+  updateViewportVars()
+}
+function detachViewportGuards() {
+  const vv = window.visualViewport
+  if (!vv || !vvHandlersAttached) return
+  vv.removeEventListener('resize', updateViewportVars)
+  vv.removeEventListener('scroll', updateViewportVars)
+  vvHandlersAttached = false
+}
+
+const skipStyle = computed(() => ({
+  top:  `calc(var(--vv-top, 0px)  + env(safe-area-inset-top, 0px) + 16px)`,
+  right:`calc(var(--vv-right,0px) + env(safe-area-inset-right,0px) + 16px)`
+}))
+const muteStyle = computed(() => ({
+  bottom:`calc(var(--vv-bottom,0px) + env(safe-area-inset-bottom,0px) + 20px)`,
+  right: `calc(var(--vv-right,0px)  + env(safe-area-inset-right,0px)  + 20px)`
+}))
+const rotateStyle = computed(() => ({
+  bottom:`calc(var(--vv-bottom,0px) + env(safe-area-inset-bottom,0px) + 20px)`,
+  left:  `calc(var(--vv-left,0px)   + env(safe-area-inset-left,0px)   + 20px)`
+}))
 
 onMounted(() => {
   updateDeviceFlags()
@@ -95,10 +137,7 @@ onMounted(() => {
   window.addEventListener('orientationchange', onResize)
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReduced) {
-    show.value = false
-    return
-  }
+  if (prefersReduced) { show.value = false; return }
 
   const v = videoEl.value
   if (v) {
@@ -107,7 +146,10 @@ onMounted(() => {
     v.addEventListener('volumechange', () => { isMuted.value = v.muted })
   }
 
-  if (isHandheld.value) attachNoZoomGuards()
+  if (isHandheld.value) {
+    attachNoZoomGuards()
+    attachViewportGuards()
+  }
   document.documentElement.style.overflow = 'hidden'
 })
 
@@ -115,6 +157,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
   window.removeEventListener('orientationchange', onResize)
   detachNoZoomGuards()
+  detachViewportGuards()
   document.documentElement.style.overflow = ''
 })
 </script>
@@ -143,7 +186,8 @@ onBeforeUnmount(() => {
     </video>
 
     <button
-      class="absolute right-4 top-4 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium text-white tracking-wide backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/40"
+      class="fixed rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium text-white tracking-wide backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/40 z-[10001]"
+      :style="skipStyle"
       @click="closeIntro"
       aria-label="Saltar introdução"
     >
@@ -151,7 +195,8 @@ onBeforeUnmount(() => {
     </button>
 
     <button
-      class="absolute bottom-5 right-5 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20"
+      class="fixed grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20 z-[10001]"
+      :style="muteStyle"
       :aria-pressed="isMuted"
       :aria-label="isMuted ? 'Ativar som' : 'Silenciar'"
       @click="toggleMute"
@@ -162,7 +207,8 @@ onBeforeUnmount(() => {
 
     <button
       v-if="isHandheld"
-      class="fixed bottom-5 left-5 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20"
+      class="fixed grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/30 transition hover:bg-white/20 z-[10001]"
+      :style="rotateStyle"
       @click="toggleOrientation"
       :aria-pressed="landscapeActive"
       :aria-label="landscapeActive ? 'Voltar a vertical' : 'Ver em horizontal'"
@@ -177,8 +223,8 @@ onBeforeUnmount(() => {
 .simulate-landscape {
   transform: rotate(90deg);
   transform-origin: center center;
-  width: 100vh;
-  height: 100vw;
+  width: 100dvh;
+  height: 100dvw;
   position: fixed;
   top: 50%;
   left: 50%;
