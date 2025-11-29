@@ -7,6 +7,7 @@ const CONTACT_ENDPOINT =
   import.meta.env.VITE_CONTACT_ENDPOINT?.replace(/\/$/, '') || defaultEndpoint
 const instaImg = `${basePath}/assets/insta.png`
 const instaLogo = `${basePath}/assets/insta-logo.png`
+const facebookLogo = `${basePath}/assets/facebook-logo.png`
 
 const form = reactive({
   name: '',
@@ -153,23 +154,35 @@ const handleSubmit = async () => {
 					</form>
 				</div>
 
-				<!-- RIGHT: INSTAGRAM CARD -->
+				<!-- RIGHT: SOCIALS CARD -->
 				<aside
 					class="w-full rounded-2xl p-5 text-center sm:p-7 lg:p-10"
 				>
 					<h3 class="font-script text-[36px] text-highlight">Siga nas Redes Sociais!</h3>
 
-					<a
-						href="https://www.instagram.com/estoriasquemecontaram_livro/"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="inline-flex items-center justify-center gap-2 text-[16px] font-medium text-white hover:opacity-90"
-						aria-label="Abrir Instagram @estoriasquemcontaram_livro"
-					>
-						<img :src="instaLogo" alt="" class="h-5 w-5" />
-						@estoriasquemecontaram_livro
-					</a>
+					<div class="mt-4 flex items-center justify-center gap-4">
+						<a
+							href="https://www.instagram.com/estoriasquemecontaram_livro/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="inline-flex items-center justify-center text-[16px] font-medium text-white hover:opacity-90"
+							aria-label="Abrir Instagram @estoriasquemcontaram_livro"
+						>
+							<img :src="instaLogo" alt="" class="h-5 w-5" />
+						</a>
 
+						<a
+							href="https://www.facebook.com/profile.php?id=61581796721454"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="inline-flex items-center justify-center text-[16px] font-medium text-white hover:opacity-90"
+							aria-label="Abrir Facebook Estórias Que Me Contaram"
+						>
+							<img :src="facebookLogo" alt="" class="h-5 w-5" />
+						</a>
+					</div>
+
+					<!-- MOCKUP -->
 					<img
 						:src="instaImg"
 						alt="Preview do Instagram"

@@ -10,27 +10,8 @@ const authorPhoto = `${base}assets/tucha-guerra.png`
   <section id="about" class="py-6 text-center">
     <div class="container">
       <div class="space-y-8 text-left">
-        <div class="space-y-5 rounded-[20px] bg-[linear-gradient(135deg,rgba(167,179,212,0.14),rgba(43,40,67,0.55))] px-5 py-6 text-center shadow-card sm:px-8">
-          <h3 class="text-[clamp(20px,3vw,26px)] font-semibold tracking-[0.02em] text-highlight">
-            Próximas Apresentações do Livro
-          </h3>
-          <div class="grid gap-6 sm:grid-cols-2">
-            <article class="flex flex-col gap-1.5 px-2">
-              <p class="m-0 text-[clamp(18px,2.6vw,22px)] font-bold text-white">28 de novembro | 21:30</p>
-              <p class="m-0 text-[clamp(14px,2.2vw,17px)] text-white/90">
-                Auditório da Biblioteca Municipal de Tomar
-              </p>
-            </article>
-            <article class="flex flex-col gap-1.5 px-2">
-              <p class="m-0 text-[clamp(18px,2.6vw,22px)] font-bold text-white">29 de novembro | 17:30</p>
-              <p class="m-0 text-[clamp(14px,2.2vw,17px)] text-white/90">
-                Biblioteca Municipal de Reguengos de Monsaraz
-              </p>
-            </article>
-          </div>
-        </div>
-
-        <div class="grid gap-8 border-b border-white/20 pb-20 lg:grid-cols-[minmax(280px,360px)_1fr] lg:items-start about-hero-grid">
+				
+        <div class="grid gap-8 border-b border-white/20 pt-8 pb-20 lg:grid-cols-[minmax(280px,360px)_1fr] lg:items-start about-hero-grid">
           <div class="flex justify-center">
             <div class="flex w-full max-w-[380px] items-center justify-center shadow-cover">
               <img
@@ -40,6 +21,7 @@ const authorPhoto = `${base}assets/tucha-guerra.png`
               >
             </div>
           </div>
+
           <div class="about-hero-text flex h-full flex-col gap-6 pt-[clamp(10px,1.4vw,18px)]">
             <h2 class="m-0 font-script text-[46px] leading-none text-highlight">Tucha Guerra</h2>
             <div class="space-y-6 text-left text-[22px] leading-[1.9] text-highlight font-serif">
