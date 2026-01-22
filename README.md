@@ -47,4 +47,4 @@ Feel free to connect with me:<br/><br/>
 ## License
 
 This project is a custom commission and not open-source.  
-All rights reserved © 2025 Eduardo Cebola.
+All rights reserved © 2026 Eduardo Cebola.
