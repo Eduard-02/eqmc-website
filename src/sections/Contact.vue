@@ -88,7 +88,7 @@ const handleSubmit = async () => {
 					<div class="space-y-5 text-center">
 						<h2 class="font-script text-[46px] text-highlight">Contacto</h2>
 						<p class="mx-auto max-w-[70ch] text-[18px] text-[#d7dbf2]">
-							Para mais informações sobre como adquirir e outros assuntos, preencha o formulário abaixo.
+							Para mais informações e outros assuntos, preencha o formulário abaixo.
 						</p>
 					</div>
 

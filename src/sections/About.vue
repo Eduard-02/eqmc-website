@@ -10,6 +10,86 @@ const authorPhoto = `${base}assets/tucha-guerra.png`
   <section id="about" class="py-6 text-center">
     <div class="container">
       <div class="space-y-8 text-left">
+
+				<div class="space-y-5 rounded-[20px] bg-[linear-gradient(135deg,rgba(167,179,212,0.14),rgba(43,40,67,0.55))] px-5 py-6 text-center shadow-card sm:px-8">
+					<div class="space-y-2">
+					<p class="text-[clamp(20px,3vw,22px)] font-semibold tracking-[0.02em] text-highlight italic">
+						Já disponível em
+					</p>
+
+					<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+						<a
+						  href="https://www.wook.pt/livro/estorias-que-me-contaram-tucha-guerra/32789963?srsltid=AfmBOopQgx2ft5N2Mzo-pLJ_VDwyK31KHoTZFWSt01-vbfVcA-FaZD2q"
+						  target="_blank"
+						  rel="noopener noreferrer"
+						  class="inline-flex items-center justify-center rounded-lg px-2 py-1 transition-opacity hover:opacity-90"
+						>
+						  <img
+						    src="/assets/wook-logo.png"
+						    alt="Wook"
+						    class="h-8 w-auto object-contain"
+						    loading="lazy"
+						    decoding="async"
+						  />
+						</a>
+
+						<a
+						  href="https://www.fnac.pt/Estorias-que-Me-Contaram-Tucha-Guerra/a13584480"
+						  target="_blank"
+						  rel="noopener noreferrer"
+						  class="inline-flex items-center justify-center rounded-lg px-2 py-1 transition-opacity hover:opacity-90"
+						>
+						  <img
+						    src="/assets/fnac-logo.png"
+						    alt="Fnac"
+						    class="h-8 w-auto object-contain"
+						    loading="lazy"
+						    decoding="async"
+						  />
+						</a>
+
+						<a
+						  href="https://www.bertrand.pt/livro/estorias-que-me-contaram-tucha-guerra/32789963?srsltid=AfmBOop4vB0jy2fpJpC734_-Dp1LWcyHEV65G3zYk1a-uJopyJhsakoE"
+						  target="_blank"
+						  rel="noopener noreferrer"
+						  class="inline-flex items-center justify-center rounded-lg px-2 py-1 transition-opacity hover:opacity-90"
+						>
+						  <img
+						    src="/assets/bertrand-logo.png"
+						    alt="Bertrand"
+						    class="h-8 w-auto object-contain"
+						    loading="lazy"
+						    decoding="async"
+						  />
+						</a>
+					</div>
+
+					<div class="mt-3 h-px w-full bg-white/10"></div>
+				</div>
+          <h3 class="text-[clamp(20px,3vw,26px)] font-semibold tracking-[0.02em] text-highlight">
+            Entrevista
+          </h3>
+          <div class="grid grid-cols-1 gap-6 justify-items-center">
+						<article class="flex flex-col gap-3 px-2 items-center">
+							<p class="m-0 text-[clamp(18px,2.6vw,22px)] font-bold text-white text-center">
+								Germano Campos Entrevista - Tucha Guerra - Janeiro 2026
+							</p>
+
+							<div class="mt-4 w-full max-w-[900px] overflow-hidden rounded-xl border border-white/10">
+								<div class="aspect-video">
+									<iframe
+										class="h-full w-full"
+										src="https://www.youtube-nocookie.com/embed/U2haVMhXjbY"
+										title="Germano Campos Entrevista - Tucha Guerra"
+										frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+										allowfullscreen
+									></iframe>
+								</div>
+							</div>
+						</article>
+          </div>
+        </div>
 				
         <div class="grid gap-8 border-b border-white/20 pt-8 pb-20 lg:grid-cols-[minmax(280px,360px)_1fr] lg:items-start about-hero-grid">
           <div class="flex justify-center">
